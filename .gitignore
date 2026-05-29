@@ -8,3 +8,6 @@ dist-ssr
 .eslintcache
 .vscode
 .idea
+
+# Database files
+*.db

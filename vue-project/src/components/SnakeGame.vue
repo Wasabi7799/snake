@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import {
+  initializeScoreDatabase,
+  listScoresFromSqlite,
+  insertScoreIntoSqlite,
+} from '@/lib/gameSqlite'
 
 // ---- Grid & Speed Constants ----
 const GRID_SIZE = 20                // 20x20 grid
@@ -56,17 +61,23 @@ let gameInterval: ReturnType<typeof setInterval> | null = null
 let rafId: number | null = null
 let explosionTimer: ReturnType<typeof setInterval> | null = null
 
-// ---- Leaderboard (localStorage) ----
+// ---- Leaderboard (SQLite + IndexedDB) ----
 
-function loadLeaderboard() {
+async function loadLeaderboard() {
   try {
-    const data = localStorage.getItem('snake-leaderboard')
-    if (data) leaderboard.value = JSON.parse(data)
-  } catch { /* ignore corrupt data */ }
+    await initializeScoreDatabase()
+    leaderboard.value = listScoresFromSqlite().slice(0, MAX_LEADERBOARD) as LeaderboardEntry[]
+  } catch {
+    // fallback: localStorage
+    try {
+      const data = localStorage.getItem('snake-leaderboard')
+      if (data) leaderboard.value = JSON.parse(data)
+    } catch { /* ignore corrupt data */ }
+  }
 }
 
-function saveLeaderboard() {
-  localStorage.setItem('snake-leaderboard', JSON.stringify(leaderboard.value))
+async function refreshLeaderboard() {
+  leaderboard.value = listScoresFromSqlite().slice(0, MAX_LEADERBOARD) as LeaderboardEntry[]
 }
 
 // Filter leaderboard entries for the currently selected mode tab
@@ -84,12 +95,17 @@ function isHighScore(): boolean {
 }
 
 // Save score with mode tag, sort descending, keep top 10
-function submitScore() {
+async function submitScore() {
   const name = playerName.value.trim() || '匿名玩家'
-  leaderboard.value.push({ name, score: score.value, date: new Date().toLocaleDateString(), mode: gameMode.value })
-  leaderboard.value.sort((a, b) => b.score - a.score)
-  leaderboard.value = leaderboard.value.slice(0, MAX_LEADERBOARD)
-  saveLeaderboard()
+  try {
+    await insertScoreIntoSqlite(name, score.value, new Date().toLocaleDateString(), gameMode.value)
+    await refreshLeaderboard()
+  } catch {
+    // fallback: in-memory
+    leaderboard.value.push({ name, score: score.value, date: new Date().toLocaleDateString(), mode: gameMode.value })
+    leaderboard.value.sort((a, b) => b.score - a.score)
+    leaderboard.value = leaderboard.value.slice(0, MAX_LEADERBOARD)
+  }
   showNameInput.value = false
   playerName.value = ''
 }
@@ -519,8 +535,8 @@ function handleKeydown(e: KeyboardEvent) {
 }
 
 // ---- Lifecycle ----
-onMounted(() => {
-  loadLeaderboard()
+onMounted(async () => {
+  await loadLeaderboard()
   initGame()
   window.addEventListener('keydown', handleKeydown)
 })

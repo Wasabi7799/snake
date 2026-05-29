@@ -35,6 +35,9 @@ coverage
 # Vitest
 __screenshots__/
 
+# Database files
+*.db
+
 # Vite
 *.timestamp-*-*.mjs
 
