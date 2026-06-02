@@ -9,5 +9,18 @@ dist-ssr
 .vscode
 .idea
 
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+
+# Vitest
+__screenshots__/
+
 # Database files
 *.db
+
+# Vite
+*.timestamp-*-*.mjs
+
+test-results/
+playwright-report/
