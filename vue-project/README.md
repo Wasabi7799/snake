@@ -1,73 +1,21 @@
-# vue-project
+# Evolved Snake
 
-This template should help get you started developing with Vue 3 in Vite.
+## Vercel Link
 
-## Recommended IDE Setup
+> 貼上你的 Vercel 連結
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Design Concept
 
-## Recommended Browser Setup
+經典貪食蛇的核心樂趣在於「在越來越受限的空間中生存」，但傳統版本一旦熟練便容易感到單調。本作以「模式多樣化」為核心設計理念，在保留原版操作直覺的基礎上，加入四種截然不同的遊戲規則——普通、雙頭蛇、無邊界、爆炸——每一種都重新定義了玩家對「威脅」與「策略」的認知。搭配等級推進的速度漸增、複數食物系統、以及爆炸模式中獨特的視覺回饋（閃爍預警→爆炸傷害），讓每一次對局都充滿新鮮感。排行榜系統按模式分類記錄，鼓勵玩家挑戰各模式的最佳成績。
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## How My Version Is Different
 
-## Type Support for `.vue` Imports in TS
+原版 Snake 只有「撞牆或撞到自己就死」一種規則。本作提供四種模式：**無邊界**允許穿牆、**雙頭蛇**在進食時蛇頭與蛇尾互換並反轉行進方向、**爆炸**模式會隨機生成閃爍炸彈區並炸毀蛇身尾部。此外還有等級系統（速度隨分數提升）、複數食物（同時存在多顆）、暫停功能、以及含模式分頁的排行榜。
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## How To Play
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Playwright](https://playwright.dev)
-
-```sh
-# Install browsers for the first run
-npx playwright install
-
-# When testing on CI, must build the project first
-npm run build
-
-# Runs the end-to-end tests
-npm run test:e2e
-# Runs the tests only on Chromium
-npm run test:e2e -- --project=chromium
-# Runs the tests of a specific file
-npm run test:e2e -- tests/example.spec.ts
-# Runs the tests in debug mode
-npm run test:e2e -- --debug
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+- **WASD / 方向鍵** — 控制蛇的移動方向
+- **空白鍵** — 開始遊戲
+- **Esc / P** — 暫停／繼續
+- 點擊上方模式分頁可切換四種遊戲規則
+- 遊戲結束後若分數達標，可輸入名稱將紀錄存入排行榜
